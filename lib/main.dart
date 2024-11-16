@@ -1,68 +1,129 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const MainApp());
+  runApp(MyApp());
 }
 
-class MainApp extends StatelessWidget {
-  const MainApp({super.key});
-
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Layout Demo',
-      theme: ThemeData(primarySwatch: Colors.blue, fontFamily: 'Doto'),
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Basic Layout'),
-        ),
-        body: ListView(
+      title: 'Images and Assets',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        fontFamily: 'Raleway', // Default font family
+      ),
+      home: HomeScreen(),
+    );
+  }
+}
+
+class HomeScreen extends StatelessWidget {
+  // URLs for remote images
+  final List<String> remoteImageUrls = [
+    'https://via.placeholder.com/800x600.png?text=Top+Image+1',
+    'https://via.placeholder.com/800x600.png?text=Top+Image+2',
+    'https://via.placeholder.com/800x600.png?text=Top+Image+3',
+  ];
+
+  // Local images list
+  final List<String> localImages = [
+    'assets/Images/Image-1.jpg',
+    'assets/Images/Image-2.jpg',
+    'assets/Images/Image-3.jpg',
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Images and Assets'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: ListView(
           children: [
+            // Top Swipeable Images (Remote)
             SizedBox(
-              height: 400,
-              child: HorizontalScroller(),
+              height: 200,
+              child: PageView.builder(
+                itemCount: remoteImageUrls.length,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Image.network(
+                      remoteImageUrls[index],
+                      fit: BoxFit.cover,
+                    ),
+                  );
+                },
+              ),
             ),
-            const SizedBox(
-              height: 20,
+
+            SizedBox(height: 16), // Spacing
+
+            // ListTile with different font variants
+            ListTile(
+              leading: Icon(Icons.book),
+              title: Text(
+                'Raleway 100',
+                style: TextStyle(fontWeight: FontWeight.w100),
+              ),
             ),
-            const ListTile(
+            ListTile(
               leading: Icon(Icons.star),
-              title: Text('ListTile with Regular Font',
-                  style: TextStyle(fontFamily: 'Doto')),
-            ),
-            const ListTile(
-              leading: CircleAvatar(child: Icon(Icons.person)),
-              title: Text('ListTile with Bold Font',
-                  style: TextStyle(fontWeight: FontWeight.bold)),
-            ),
-            const ListTile(
+              title: Text(
+                'Raleway 400',
+                style: TextStyle(fontWeight: FontWeight.w400),
+              ),
+            ),  
+            ListTile(
               leading: Icon(Icons.settings),
-              title: Text('ListTile with Italic Font',
-                  style: TextStyle(
-                      fontFamily: 'Doto', fontStyle: FontStyle.normal)),
+              title: Text(
+                'Raleway 700',
+                style: TextStyle(fontWeight: FontWeight.w700),
+              ),
             ),
-            const ListTile(
-              trailing: Icon(Icons.arrow_forward),
-              title: Text('Default Device Font'),
+            ListTile(
+              leading: CircleAvatar(
+                child: Text('R1'),
+              ),
+              title: Text(
+                'Roboto Regular',
+                style: TextStyle(fontFamily: 'Roboto'),
+              ),
             ),
-            const SizedBox(height: 20), // Space between elements
+            ListTile(
+              leading: CircleAvatar(
+                child: Text('B'),
+              ),
+              title: Text(
+                'Roboto Bold',
+                style: TextStyle(fontFamily: 'Roboto', fontWeight: FontWeight.bold),
+              ),
+            ),
+
+            SizedBox(height: 16), // Spacing
+
+            // Bottom Swipeable Images (Local)
+            SizedBox(
+              height: 200,
+              child: PageView.builder(
+                itemCount: localImages.length,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Image.asset(
+                      localImages[index],
+                      fit: BoxFit.cover,
+                    ),
+                  );
+                },
+              ),
+            ),
           ],
         ),
       ),
-    );
-  }
-
-  ListView HorizontalScroller() {
-    return ListView.builder(
-      itemCount: 3,
-      scrollDirection: Axis.horizontal,
-      itemBuilder: (context, index) {
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          child: Image.network('https://placehold.co/600x400@2x.png',
-              width: 200, height: 200),
-        );
-      },
     );
   }
 }
